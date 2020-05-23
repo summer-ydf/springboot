@@ -15,4 +15,6 @@ public interface UserService {
     List<User> findVagueByName(String name);
 
     Map<String, Object> updateCustomByById(User user);
+
+    Map<String, Object> removeCustomByById(Integer id);
 }

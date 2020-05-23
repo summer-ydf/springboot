@@ -147,15 +147,25 @@ public class UserController {
     }
 
     /**
-     * 自定义：根据用户名id更新用户信息用户信息
+     * 自定义：根据用户名id更新用户信息
      * @param user
      * @return
      */
-    @GetMapping(value = "updateCustomByById")
+    @PostMapping(value = "updateCustomByById")
     @ResponseBody
     public Map<String,Object> updateCustomByById(User user){
         return userService.updateCustomByById(user);
     }
 
 
+    /**
+     * 自定义：根据用户名id删除用户信息
+     * @param id
+     * @return
+     */
+    @DeleteMapping(value = "removeCustomByById/{id}")
+    @ResponseBody
+    public Map<String,Object> removeCustomByById(@PathVariable Integer id){
+        return userService.removeCustomByById(id);
+    }
 }

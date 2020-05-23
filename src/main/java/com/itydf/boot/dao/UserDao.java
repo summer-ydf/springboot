@@ -31,11 +31,23 @@ public interface UserDao extends JpaRepository<User,Integer> {
     List<User> findVagueByName(String name);
 
     /**
-     * 自定义：根据用户名id更新用户信息用户信息
-     * @param user
+     * 自定义：根据用户名id更新用户信息
+     * @param id
+     * @param name
      * @return
      */
     @Modifying
     @Query(value = "update user set name = :name where id = :id",nativeQuery = true)
     int updateCustomByById(Integer id,String name);  //入参绝对不能定义成 User对象，JPA不支持,只有查询可以使用SPEL表达式
+
+    /**
+     * 自定义：根据用户名id删除用户信息
+     * 执行完modifying query， EntityManager可能会包含过时的数据，因为EntityManager不会自动清除实体。
+     * 只有添加clearAutomatically属性，EntityManager才会自动清除实体对象。
+     * @param id
+     * @return
+     */
+    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from user where id = :id",nativeQuery = true)
+    int removeCustomByById(Integer id);
 }

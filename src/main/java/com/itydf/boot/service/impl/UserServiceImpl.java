@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 自定义：根据用户名id更新用户信息用户信息
+     * 自定义：根据用户名id更新用户信息
      * @param user
      * @return
      */
@@ -97,6 +97,27 @@ public class UserServiceImpl implements UserService {
         }else {
             map.put("code","2001");
             map.put("message","参数不能为空");
+        }
+        return map;
+    }
+
+    /**
+     * 自定义：根据用户名id删除用户信息
+     * @param id
+     * @return
+     */
+    @Override
+    @Transactional
+    public Map<String, Object> removeCustomByById(Integer id) {
+        Map<String,Object> map = new HashMap<>();
+        int count = userDao.removeCustomByById(id);
+        if(count > 0){
+            map.put("code","2000");
+            map.put("message","删除成功");
+            map.put("data",id);
+        }else {
+            map.put("code","2001");
+            map.put("message","删除失败");
         }
         return map;
     }

@@ -11,6 +11,8 @@ public class UserController {
     @ResponseBody
     public String index(){
         System.out.println("交给Git管理了");
+        System.out.println("代码修改001");
+        System.out.println("代码修改002");
         return "Hello SpringData JPA";
     }
 }

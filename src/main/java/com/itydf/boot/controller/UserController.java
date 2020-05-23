@@ -1,23 +1,46 @@
 package com.itydf.boot.controller;
 
+import com.itydf.boot.dao.UserDao;
+import com.itydf.boot.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
+@RequestMapping(value = "user")
 public class UserController {
 
-    @GetMapping("index")
+    @Autowired
+    private UserDao userDao;
+
+    /***
+     * 根据id查询用户信息
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "getUserById/{id}")
     @ResponseBody
-    public String index(){
-        System.out.println("交给Git管理了");
-        System.out.println("代码修改001");
-        System.out.println("代码修改002");
-        System.out.println("创建分支");
-        System.out.println("解决冲突：主干添加内容");
-        System.out.println("解决冲突：分支添加内容");
-        System.out.println("同伴在线更新了代码");
-        System.out.println("本地做了修改代码");
-        return "Hello SpringData JPA";
+    public User getUser(@PathVariable("id") Integer id){
+        Optional<User> user = userDao.findById(id);  //根据ID查询
+        return user.ofNullable(user).map(user1->user.get()).orElse(null);
     }
+
+    /***
+     * 查询所有用户List集合
+     * @return
+     */
+    @GetMapping(value = "findAll")
+    @ResponseBody
+    public List<User> findAll(){
+        List<User> userList = userDao.findAll();
+        return userList;
+    }
+
+
 }

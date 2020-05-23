@@ -124,6 +124,27 @@ public class UserController {
         return userService.findUserByName(name);
     }
 
+    /**
+     * 自定义：根据用户名查询用户信息
+     * @param name
+     * @return
+     */
+    @GetMapping(value = "findCustomByName")
+    @ResponseBody
+    public User findCustomByName(@PathParam("name") String name){
+        return userService.findCustomByName(name);
+    }
+
+    /**
+     * 自定义：根据用户名查询用户信息 (模糊查询)
+     * @param name
+     * @return
+     */
+    @GetMapping(value = "findVagueByName")
+    @ResponseBody
+    public List<User> findVagueByName(@PathParam("name") String name){
+        return userService.findVagueByName(name);
+    }
 
 
 }

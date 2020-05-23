@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,5 +43,33 @@ public class UserServiceImpl implements UserService {
             map.put("data",null);
         }
         return map;
+    }
+
+    /**
+     * 自定义：根据用户名查询用户信息
+     * @param name
+     * @return
+     */
+    @Override
+    public User findCustomByName(String name) {
+        if(StringUtils.isNotBlank(name)){
+            return userDao.findCustomByName(name);
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * 自定义：根据用户名查询用户信息 (模糊查询)
+     * @param name
+     * @return
+     */
+    @Override
+    public List<User> findVagueByName(String name) {
+        if(StringUtils.isNotBlank(name)){
+            return userDao.findVagueByName(name);
+        }else {
+            return null;
+        }
     }
 }

@@ -4,7 +4,11 @@ import com.itydf.boot.dao.UserDao;
 import com.itydf.boot.pojo.User;
 import com.itydf.boot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -167,5 +171,17 @@ public class UserController {
     @ResponseBody
     public Map<String,Object> removeCustomByById(@PathVariable Integer id){
         return userService.removeCustomByById(id);
+    }
+
+
+    @GetMapping(value = "listUsers")
+    @ResponseBody
+    public Page<User> listUsers(ModelMap modelMap,
+                                @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                @RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize){
+        //设置分页
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        //根据账户名进行查询
+        return userDao.findAll(pageable);
     }
 }

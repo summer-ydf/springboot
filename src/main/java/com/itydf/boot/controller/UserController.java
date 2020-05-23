@@ -17,6 +17,7 @@ public class UserController {
         System.out.println("解决冲突：主干添加内容");
         System.out.println("解决冲突：分支添加内容");
         System.out.println("同伴在线更新了代码");
+        System.out.println("本地做了修改代码");
         return "Hello SpringData JPA";
     }
 }

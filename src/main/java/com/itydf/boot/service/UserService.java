@@ -13,4 +13,6 @@ public interface UserService {
     User findCustomByName(String name);
 
     List<User> findVagueByName(String name);
+
+    Map<String, Object> updateCustomByById(User user);
 }

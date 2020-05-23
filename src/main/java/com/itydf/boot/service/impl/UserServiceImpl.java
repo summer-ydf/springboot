@@ -7,6 +7,7 @@ import com.itydf.boot.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -71,5 +72,32 @@ public class UserServiceImpl implements UserService {
         }else {
             return null;
         }
+    }
+
+    /**
+     * 自定义：根据用户名id更新用户信息用户信息
+     * @param user
+     * @return
+     */
+    @Override
+    @Transactional  //必须加@Transactional，来代表这是一个事务级别的操作。jpa要求，'没有事务支持，不能执行更新和删除操作'
+    public Map<String, Object> updateCustomByById(User user) {
+        Map<String,Object> map = new HashMap<>();
+        if(user !=null){
+            //注意：1、返回值只有int和void 2、入参绝对不能定义成 User对象，JPA不支持,只有查询可以使用SPEL表达式
+            int user1 = userDao.updateCustomByById(user.getId(),user.getName());
+            if(user1 > 0){
+                map.put("code","2000");
+                map.put("message","修改成功");
+                map.put("data",user1);
+            }else {
+                map.put("code","2001");
+                map.put("message","修改失败");
+            }
+        }else {
+            map.put("code","2001");
+            map.put("message","参数不能为空");
+        }
+        return map;
     }
 }

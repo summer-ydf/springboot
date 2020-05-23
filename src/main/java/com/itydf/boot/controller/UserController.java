@@ -146,5 +146,16 @@ public class UserController {
         return userService.findVagueByName(name);
     }
 
+    /**
+     * 自定义：根据用户名id更新用户信息用户信息
+     * @param user
+     * @return
+     */
+    @GetMapping(value = "updateCustomByById")
+    @ResponseBody
+    public Map<String,Object> updateCustomByById(User user){
+        return userService.updateCustomByById(user);
+    }
+
 
 }

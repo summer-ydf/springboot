@@ -1,7 +1,6 @@
 package com.itydf.boot.pojo;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity                     //告诉JPA这是一个实体类（和数据表映射的类）
 @Table(name = "user")       //@Table指定和哪个表对应，如果省略该注解默认表名就是user

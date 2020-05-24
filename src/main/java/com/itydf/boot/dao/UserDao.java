@@ -8,10 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 //继承就是子类继承父类的特征和行为,使得子类对象(实例)具有父类的实例域和方法
 public interface UserDao extends JpaRepository<User,Integer> {

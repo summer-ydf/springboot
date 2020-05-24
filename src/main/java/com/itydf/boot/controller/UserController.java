@@ -184,7 +184,7 @@ public class UserController {
     @GetMapping(value = "listUsers")
     public String listUsers(ModelMap modelMap,
                                 @RequestParam(value = "pageNumber",defaultValue = "0") Integer pageNumber,
-                                @RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize){
+                                @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize){
         //设置分页
         Pageable pageable = PageRequest.of(pageNumber,pageSize);
         //进行查询

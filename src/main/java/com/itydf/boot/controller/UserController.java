@@ -174,14 +174,22 @@ public class UserController {
     }
 
 
+    /**
+     * 分页（无条件查询）
+     * @param modelMap
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
     @GetMapping(value = "listUsers")
-    @ResponseBody
-    public Page<User> listUsers(ModelMap modelMap,
-                                @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+    public String listUsers(ModelMap modelMap,
+                                @RequestParam(value = "pageNumber",defaultValue = "0") Integer pageNumber,
                                 @RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize){
         //设置分页
         Pageable pageable = PageRequest.of(pageNumber,pageSize);
-        //根据账户名进行查询
-        return userDao.findAll(pageable);
+        //进行查询
+        Page<User> userPage = userDao.findAll(pageable);
+        modelMap.addAttribute("data",userPage);
+        return "index";
     }
 }

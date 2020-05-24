@@ -31,13 +31,17 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>name</th>
+                <th>用户</th>
+                <th>性别</th>
+                <th>职位</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="user : ${data}">
-                <td th:text="${user.id}">1</td>
-                <td th:text="${user.name}">2</td>
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.sex == 1 ? '女':'男'}"></td>
+                <td th:text="${user.position}">2</td>
             </tr>
             </tbody>
         </table>

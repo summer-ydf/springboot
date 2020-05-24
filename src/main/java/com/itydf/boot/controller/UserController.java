@@ -2,11 +2,13 @@ package com.itydf.boot.controller;
 
 import com.itydf.boot.dao.UserDao;
 import com.itydf.boot.pojo.User;
+import com.itydf.boot.query.UserQuery;
 import com.itydf.boot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -186,10 +188,34 @@ public class UserController {
                                 @RequestParam(value = "pageNumber",defaultValue = "0") Integer pageNumber,
                                 @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize){
         //设置分页
-        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.Direction.DESC, "id");
         //进行查询
         Page<User> userPage = userDao.findAll(pageable);
         modelMap.addAttribute("data",userPage);
         return "index";
+    }
+
+    /**
+     * 分页（带条件查询）
+     * @param modelMap
+     * @param pageNumber
+     * @param pageSize
+     * @param userQuery
+     * @return
+     */
+    @GetMapping(value = "listUserQuery")
+    public String listUserQuery(ModelMap modelMap,
+                                    @RequestParam(value = "pageNumber",defaultValue = "0") Integer pageNumber,
+                                    @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+                                    UserQuery userQuery){
+        //设置分页
+        Pageable pageable = PageRequest.of(pageNumber,pageSize,Sort.Direction.ASC, "id");
+        //进行查询
+        Page<User> userPage = userService.findUserQuery(pageable,userQuery);
+        modelMap.addAttribute("data",userPage);
+        modelMap.addAttribute("name",userQuery.getName());
+        modelMap.addAttribute("sex",userQuery.getSex());
+        modelMap.addAttribute("position",userQuery.getPosition());
+        return "home";
     }
 }

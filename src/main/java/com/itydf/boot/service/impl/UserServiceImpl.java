@@ -3,17 +3,22 @@ package com.itydf.boot.service.impl;
 
 import com.itydf.boot.dao.UserDao;
 import com.itydf.boot.pojo.User;
+import com.itydf.boot.query.UserQuery;
 import com.itydf.boot.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -120,5 +125,33 @@ public class UserServiceImpl implements UserService {
             map.put("message","删除失败");
         }
         return map;
+    }
+
+    /**
+     * 分页（带条件查询）
+     * @param pageable
+     * @param userQuery
+     * @return
+     */
+    @Override
+    public Page<User> findUserQuery(Pageable pageable, UserQuery userQuery) {
+        Page<User> userPage = userDao.findAll(new Specification<User>(){
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> list = new ArrayList<>();
+                if (StringUtils.isNotBlank(userQuery.getName())){
+                    list.add(criteriaBuilder.equal(root.get("name").as(String.class), userQuery.getName()));
+                }
+                if(userQuery.getSex() != null){
+                    list.add(criteriaBuilder.equal(root.get("sex").as(Integer.class), userQuery.getSex()));
+                }
+                if (StringUtils.isNotBlank(userQuery.getPosition())){
+                    list.add(criteriaBuilder.equal(root.get("position").as(String.class), userQuery.getPosition()));
+                }
+                Predicate[] p = new Predicate[list.size()];
+                return criteriaBuilder.and(list.toArray(p));
+            }
+        },pageable);
+        return userPage;
     }
 }

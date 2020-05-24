@@ -1,6 +1,9 @@
 package com.itydf.boot.dao;
 
 import com.itydf.boot.pojo.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -50,4 +53,12 @@ public interface UserDao extends JpaRepository<User,Integer> {
     @Modifying(clearAutomatically = true)
     @Query(value = "delete from user where id = :id",nativeQuery = true)
     int removeCustomByById(Integer id);
+
+    /**
+     * 分页（带条件查询）
+     * @param userSpecification
+     * @param pageable
+     * @return
+     */
+    Page<User> findAll(Specification<User> userSpecification, Pageable pageable);
 }

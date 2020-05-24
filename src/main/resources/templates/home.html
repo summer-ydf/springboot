@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="page">
+<head>
+    <meta charset="UTF-8">
+    <title>分页</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" >
+
+    <style>
+        .active{
+            background: #49af4f !important;
+            color: #fff !important;
+        }
+    </style>
+</head>
+<body>
+<div class="panel panel-danger">
+    <div class="panel-heading">
+        <h1 class="panel-title" style="text-align: center;font-weight: bold;padding: 10px;">SpringData JPA 带条件查询 | 分页</h1>
+    </div>
+    <div class="panel-body">
+
+        <!--带条件查询-->
+        <!--th:object，用法：th:object="${userQuery}"，(用来接受后台传过来的对象)-->
+        <!--th:field，用法：th:field="*{name}"，(用来绑定后台对象和表单数据)-->
+        <hr>
+        <form class="form-inline" th:action="@{/user/listUserQuery}" th:object="${userQuery}" th:method="get">
+            <div class="form-group">
+                <label>用户：</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="请输入用户名称" th:field="*{name}">
+            </div>
+            <div class="form-group">
+                <label>职业：</label>
+                <input type="text" class="form-control" id="position" placeholder="请输入职业" th:field="*{position}">
+            </div>
+            <div class="form-group">
+                <label>性别：</label>
+                <select class="form-control" id="sex" th:field="*{sex}">
+                    <option value="">==请选择==</option>
+                    <option value="1">女</option>
+                    <option value="2">男</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">查询</button>
+        </form>
+        <hr>
+
+        <!--bootstrap表格-->
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>用户</th>
+                <th>性别</th>
+                <th>职位</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${data}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.sex == 1 ? '女':'男'}"></td>
+                <td th:text="${user.position}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!--bootstrap自定义分页-->
+        <ul class="pager">
+            <li th:if="${data.hasPrevious()}">
+                <a th:href="@{/user/listUserQuery(pageNumber=0,name=${name},sex=${sex},position=${position})}">首页</a>
+            </li>
+            <li th:if="${data.hasPrevious()}">
+                <a th:href="@{/user/listUserQuery(pageNumber=${data.number}-1,name=${name},sex=${sex},position=${position})}">上一页</a>
+            </li>
+
+            <!--总页数大于等于0并且小于等于5-->
+            <div th:if="${(data.totalPages le 5) and (data.totalPages gt 0)}" th:remove="tag">
+                <!--根据一个数字在页面循环生成固定的标签-->
+                <div th:each="pg : ${#numbers.sequence(0, data.totalPages - 1)}" th:remove="tag">
+                    <!--如果循环的数等于当前页-->
+                    <span th:if="${pg eq data.getNumber()}" th:remove="tag">
+                        <li><span class="active" th:text="${pg+1}"></span></li>
+                    </span>
+                    <!--如果循环的数不等于当前页-->
+                    <span th:unless="${pg eq data.getNumber()}" th:remove="tag">
+                        <li><a th:href="@{/user/listUserQuery(pageNumber=${pg},name=${name},sex=${sex},position=${position})}" th:text="${pg+1}"></a></li>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 总页数大于5时、中间留五个分页条 -->
+            <div th:if="${data.totalPages gt 5}" th:remove="tag">
+                <li th:if="${data.getNumber()-2 ge 0}"><a th:href="@{/user/listUserQuery(pageNumber=${data.getNumber()}-2,name=${name},sex=${sex},position=${position})}" th:text="${data.getNumber()-1}"></a></li>
+                <li th:if="${data.getNumber()-1 ge 0}"><a th:href="@{/user/listUserQuery(pageNumber=${data.getNumber()}-1,name=${name},sex=${sex},position=${position})}" th:text="${data.getNumber()}"></a></li>
+                <li><span class="active" th:text="${data.getNumber()+1}"></span></li>
+                <li th:if="${data.getNumber()+1 lt data.totalPages}"><a th:href="@{/user/listUserQuery(pageNumber=${data.getNumber()}+1,name=${name},sex=${sex},position=${position})}" th:text="${data.getNumber()+2}"></a></li>
+                <li th:if="${data.getNumber()+2 lt data.totalPages}"><a th:href="@{/user/listUserQuery(pageNumber=${data.getNumber()}+2,name=${name},sex=${sex},position=${position})}" th:text="${data.getNumber()+3}"></a></li>
+            </div>
+
+            <li  th:if="${data.hasNext()}">
+                <a th:href="@{/user/listUserQuery(pageNumber=${data.getNumber()}+1,name=${name},sex=${sex},position=${position})}">下一页</a>
+            </li>
+            <li><a th:href="@{/user/listUserQuery(pageNumber=${data.totalPages}-1,name=${name},sex=${sex},position=${position})}">尾页</a></li>
+            <li><span th:utext="'共'+${data.totalPages}+'页 / 总'+${data.totalElements}+'条'"></span></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

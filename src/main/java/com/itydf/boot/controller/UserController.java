@@ -15,10 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "user")
@@ -218,4 +215,23 @@ public class UserController {
         modelMap.addAttribute("position",userQuery.getPosition());
         return "home";
     }
+
+    /**
+     * 批量添加
+     * @return
+     */
+    @PostMapping(value = "saveAll")
+    @ResponseBody
+    public Map<String,Object> saveAll(){
+        Map<String,Object> map = new HashMap<>();
+        for (int i = 0; i < 5000; i++) {
+            User user = new User("李四"+i,1,"研发部");
+            userDao.save(user);
+        }
+        map.put("code",2000);
+        map.put("message","success");
+        return map;
+    }
+
+
 }

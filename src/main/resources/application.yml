@@ -8,6 +8,7 @@ spring:
     hibernate:
      ddl-auto: update
     show-sql: true
+    open-in-view: false
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -26,3 +27,11 @@ spring:
     static-path-pattern: /static/**
 server:
   port: 8081
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      min-spare: 20
+      max: 100
+    connection-timeout: 5000
+
+

@@ -60,6 +60,13 @@ public class User {
         this.name = name;
     }
 
+    //批量添加信息：有参数的构造器
+    public User(String name,Integer sex,String position){
+        this.name = name;
+        this.sex = sex;
+        this.position = position;
+    }
+
     //更新信息：有参数的构造器
     public User(Integer id,String name){
         this.id = id;
